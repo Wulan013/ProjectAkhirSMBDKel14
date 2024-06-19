@@ -1,0 +1,36 @@
+
+<?php
+include 'lib/function.php';
+$id = $_GET['id'];
+$produk = query("SELECT * FROM produk WHERE id_produk='$id'")[0];
+
+// Cek tombol update
+if (isset($_POST["submit"])) {
+    // Ambil data dari form
+    $namaProduk = $_POST["nama_produk"];
+    $hargaProduk = $_POST["harga_produk"];
+    $deskripsi = $_POST["deskripsi"];
+    $fotoProduk = $_POST["foto_produk"];
+
+    // Buat pernyataan SQL untuk memanggil stored procedure update_produk
+    $sql = "CALL update_produk('$id', '$nama_produk', '$harga_produk', '$deskripsi', '$foto_produk')";
+
+    // Eksekusi stored procedure
+    $result = mysqli_query($conn, $sql);
+
+    // Periksa apakah update berhasil
+    if ($result) {
+        echo "
+        <script>
+            alert('Produk berhasil diupdate');
+            document.location.href='index.php?halaman=produk';
+        </script>";
+    } else {
+        echo "
+        <script>
+            alert('Produk gagal diupdate');
+            document.location.href='index.php?halaman=produk';
+        </script>";
+    }
+}
+?>
